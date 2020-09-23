@@ -1,0 +1,1 @@
+java -classpath lib/farming.jar;classFiles farming.app.AnimalFarmTest

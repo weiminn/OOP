@@ -1,0 +1,1 @@
+javac -classpath lib/* -sourcepath source -d out source/demo/Tester.java

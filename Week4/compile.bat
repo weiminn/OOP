@@ -1,0 +1,1 @@
+javac -d out -cp library -sourcepath src src/Test.java

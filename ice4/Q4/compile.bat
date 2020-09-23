@@ -1,0 +1,1 @@
+javac -classpath ben_code -sourcepath my_code -d my_compiled my_code/smu/bidding/App.java
