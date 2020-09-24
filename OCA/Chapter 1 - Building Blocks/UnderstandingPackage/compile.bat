@@ -1,0 +1,1 @@
+javac packagea/ClassA.java packageb/ClassB.java
