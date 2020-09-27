@@ -1,0 +1,8 @@
+#set( $num_quantity = 0 )
+#set( $num_price = 0 )
+#foreach( $product in $products )
+There are $product.Quantity $product.Name, each cost $$product.Price
+#set( $num_quantity = $num_quantity + $product.Quantity )
+#set( $num_price = $num_price + $product.Price )
+#end
+There are $num_quantity products with a total value of $$num_price to be sold.
