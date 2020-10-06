@@ -1,0 +1,1 @@
+javac -cp lib/* -sourcepath source -d output source/DatabaseDemo.java
