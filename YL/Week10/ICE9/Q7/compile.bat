@@ -1,0 +1,1 @@
+javac -d target -cp lib/* -sourcepath src src/Reader.java

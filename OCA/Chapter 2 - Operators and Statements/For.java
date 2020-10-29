@@ -16,6 +16,11 @@ public class For {
             }
             
         }
+
+        //infinte loop
+        for (int i = 0; i < args.length;) {
+            //update condition is optional
+        }
     }
     
 }
