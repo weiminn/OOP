@@ -25,12 +25,14 @@ public class Array {
         //declare 2 arrays
         int[] b1, b2;
 
-        //declare an array and an it
+        //declare an array and an int
         int b3[], b4;
 
         int[] toSort = {2, 43, 6, 45};
         Arrays.sort(toSort);
 
+        //Searching
+        //needs to be sorted
         System.out.println(Arrays.binarySearch(toSort, 43));
         
         

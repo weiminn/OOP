@@ -6,15 +6,9 @@ public class ArrayLists {
     public static void main(String[] args) {
 
         //OLD way Java ver. <5
-
-        //default number of elements
-        ArrayList list1 = new ArrayList();
-
-        //specific size
-        ArrayList list2 = new ArrayList(23);
-
-        //copy both size and contents
-        ArrayList list1 = new ArrayList(list2);
+        ArrayList list1 = new ArrayList(); //default number of elements
+        ArrayList list2 = new ArrayList(23); //specific size
+        ArrayList list3 = new ArrayList(list2); //copy both size and contents
 
         //Java ver. 5>=
         //generics introducted
@@ -26,7 +20,6 @@ public class ArrayLists {
         ArrayList<String> list5 = new ArrayList<>();
         
         //adding
-
         //other methods in Java.Collections uses boolean in their algo
         boolean res = list5.add("str");
         //add to index
