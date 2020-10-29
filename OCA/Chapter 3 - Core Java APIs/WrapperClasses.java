@@ -20,7 +20,7 @@ public class WrapperClasses {
         //no parsing for char
 
         //String to wrapper
-        Boolean.valueOf("true")
+        Boolean.valueOf("true");
         //same for all other types
         //except char which don't have
     }
