@@ -1,0 +1,320 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Subscription</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <!-- Font-Awesome CDN -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" crossorigin="anonymous">
+
+    <!-- DataTable CSS-->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/dataTables.bootstrap4.min.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.5/css/responsive.bootstrap4.min.css" crossorigin="anonymous">
+
+    <!-- External CSS -->
+    <link rel="stylesheet" th:href="@{/css/external.css}">
+    
+    <!-- Internal CSS -->
+    <style>
+        #vesselInfoTable{
+            background-color: white;
+        }
+        .subFont{
+            font-size: 35px;
+        }
+        .mytable>tbody>tr>td, 
+        .mytable>tbody>tr>th, 
+        .mytable>tfoot>tr>td, 
+        .mytable>tfoot>tr>th, 
+        .mytable>thead>tr>td, 
+        .mytable>thead>tr>th {
+            padding: 10px;
+        }
+    </style>
+ 
+</head>
+<body>
+    <!-- Navbar -->
+    <div th:insert="fragments/header :: header"></div>
+    
+    <!-- Store Session Values -->
+    <input id="token" type="hidden" name="token" th:value="${session.token}">
+    <input id="userID" type="hidden" name="userID" th:value="${session.id}">
+    <input id="name2" type="hidden" name="name2" th:value="${session.name}">
+
+    <!-- The Container that holds the datatable and Dropdownlist for dates -->
+    <div class="container">
+
+        <div class="col-lg-4">
+            <table class="table table-sm table-bordered">
+                <tbody>
+                    <tr>
+                        <th colspan="2" style="background: white;text-align: center;" scope="col">Change in Berth timing:</th>
+                    </tr>       
+                    <tr>
+                        <td style="text-align: center;" class="table-danger"> > than an hour</td>
+                        <td style="text-align: center;" class="table-warning"> < than an hour</td>
+                    </tr>       
+                </tbody>
+              </table>
+        </div>
+        
+
+        <!-- The datatable -->
+        <table id="vesselInfoTable" class="table mytable table-hover table-striped table-bordered dt-responsive nowrap shadow-sm text-center" style="width:100%">
+            <thead> 
+                <tr>
+                    <th>Berth Time</th>
+                    <th>Vessel Name</th>
+                    <!-- <th>In-Voy No.</th> -->
+                    <th>Out-Voy No.</th>
+                    <th>Departing On</th>
+                    <th>Berth No.</th>
+                    <th>Status</th>
+                    <th>Change</th>
+                    <th>
+                        Action <a href="#" 
+                                        id="actionpop" 
+                                        title="Action" 
+                                        data-toggle="popover" 
+                                        data-trigger="focus" 
+                                        data-placement="top" 
+                                        data-html="true" 
+                                        data-content="
+                                                     <p>
+                                                        <i  class='fa fa-times ml-2 subFont text-danger' style='color:red'></i>
+                                                        Click to unsubscribe vessseel from subscription list
+                                                     <p/> ">
+                                    <i class="fa fa-lg fa-question-circle-o text-dark" ></i>
+                               </a>
+                    </th>
+                </tr>
+            </thead>
+
+            
+            <tbody><!-- Data Dynamically Populated --></tbody>
+        </table>
+    </div>
+
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    
+
+    <!-- Meant for DataTable -->
+    <!-- <script src="https://code.jquery.com/jquery-3.5.1.js" crossorigin="anonymous"></script> -->
+    <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap4.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.datatables.net/responsive/2.2.5/js/dataTables.responsive.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.datatables.net/responsive/2.2.5/js/responsive.bootstrap4.min.js" crossorigin="anonymous"></script>
+
+    <script th:src="@{/js/navBarBadgeValues.js}" crossorigin="anonymous"></script>
+    
+    <script>
+
+        localStorage.setItem("noOfSubAdded", JSON.stringify([]));
+
+        $('#subbadge').text(JSON.parse(localStorage.getItem("noOfSubAdded")).length);
+
+        // Show or hide badge based on value
+        if($('#subbadge').text() <= 0){
+            $('#subbadge').hide();
+        }else{
+            $('#subbadge').show();
+        }
+
+        /** 
+        *   Formats Date Object 
+        *   @params Date   : The date object to be formatted
+        *   @return String : The formatted date "dd/mm/yyyy"
+        */
+        function formatDate(date) {
+            return date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
+        }
+
+        /** 
+        *   Formats Date Object 
+        *   @params Date   : The date object to be formatted
+        *   @return String : The formatted date "yyyy/mm/dd"
+        */
+        function formatDateAPI(date) {
+            return date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
+        }
+
+        
+
+       async function removeSubscription(obj){
+        console.log("here");
+        let userID = obj.getAttribute("userID");
+        let vesselName = obj.getAttribute("name");
+        let shiftSeqN = obj.getAttribute("shiftSeqN");
+
+        let name = vesselName.split("(")[0].trim();
+        let inVoyage = vesselName.split("(")[1];
+        inVoyage = inVoyage.slice(0,-1);
+
+        console.log(userID);
+        console.log(name);
+        console.log(inVoyage+shiftSeqN)
+
+        removeFromSubscription(userID,name,inVoyage,shiftSeqN);
+        
+       }
+
+       async function removeFromSubscription(userID,name,inVoyage,shiftSeqN){
+            let result = await makeRequest("/subscriptions/removeSub", "POST", "userID="+userID+"&incoming_voyage="+inVoyage+"&vessel="+name+"&shiftSeqN="+shiftSeqN);
+            if (result = "Deleted"){
+                console.log("Successfully Removed Subscription");
+                location.reload();
+            }
+        }
+        
+
+        function makeRequest(url,method,values) {
+            return new Promise(function (resolve, reject) {
+
+                var token = $("#token").val();
+
+                let request = new XMLHttpRequest();
+
+                request.open(method, url);
+                request.onload = function () {
+                    if (this.status >= 200 && this.status < 300) {
+                        resolve(request.response);
+                    } else {
+                        reject({
+                            status: this.status,
+                            statusText: request.statusText
+                        });
+                    }
+                };
+                request.onerror = function () {
+                    reject({
+                        status: this.status,
+                        statusText: request.statusText
+                    });
+                };
+                request.setRequestHeader('Authorization', 'Bearer ' + token)
+                request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                request.send(values);
+            });
+        }
+
+        async function retreieveVesselInformation(userID){
+
+            let result = await makeRequest("subscriptions/" + userID, "GET", "");
+
+            var listOfVessels = JSON.parse(result);
+
+            var dataTable = $('#vesselInfoTable').DataTable();
+            dataTable.clear().draw();
+            
+            for(vessel in listOfVessels){
+                let vesselRow = document.createElement("tr");
+                let name = document.createElement("td");
+                // let inVoyageNumber = document.createElement("td");
+                let outVoyageNumber = document.createElement("td");
+                let berthingTime = document.createElement("td");
+                let departingTime = document.createElement("td");
+                let berthNumber = document.createElement("td");
+                let status = document.createElement("td");
+                let change = document.createElement("td");
+                let action = document.createElement("td");
+                
+                var shiftSeqN = listOfVessels[vessel]["shiftSeqN"];
+                var updatedBerthTime = listOfVessels[vessel]['updatedBerthingTime'];
+                var initialBerthTime = listOfVessels[vessel]['berthingTime'];
+
+                var berthTime = initialBerthTime.split("T")[1];
+                var datePassedIn = initialBerthTime.split("T")[0];
+
+
+                if(updatedBerthTime != null){
+                    berthTime = updatedBerthTime.split("T")[1];
+
+                    // If updated berth time is later initial berth time
+                    if(Date.parse(updatedBerthTime) > Date.parse(initialBerthTime)){
+                        console.log("Updated time is later than intial berth time")
+                        // 3540000 milliseconds = 59 minutes
+                        if(Math.abs(Date.parse(updatedBerthTime) - Date.parse(initialBerthTime)) > 3540000){
+                            console.log("red");
+                            vesselRow.className = "table-danger";
+                        }else{
+                            console.log("yellow");
+                            vesselRow.className = "table-warning";
+                        }
+                    }
+                    // If updated berth time is earlier initial berth time
+                    else{
+                        // 3540000 milliseconds = 59 minutes
+                        if(Math.abs(Date.parse(initialBerthTime) - Date.parse(updatedBerthTime)) > 3540000){
+                            console.log("red");
+                            vesselRow.className = "table-danger";
+                        }else{
+                            console.log("yellow");
+                            vesselRow.className = "table-warning";
+                        }
+                        console.log("Updated time is earlier than intial berth time")
+                    }
+                }
+
+                name.innerText = listOfVessels[vessel]['name'] +"\n("+ listOfVessels[vessel]['incomingVoyageNumber'] + ")";
+                //inVoyageNumber.innerText = listOfVessels[vessel]['incomingVoyageNumber'];
+                outVoyageNumber.innerText = listOfVessels[vessel]['outVoyageNumber'];
+
+                if(updatedBerthTime != null){
+                    berthingTime.innerHTML = `<a data-toggle="originalTimeToolTip" data-placement="top" title="Intial Berthing Time: ${initialBerthTime.split("T")[0] +" "+ initialBerthTime.split("T")[1]}">${datePassedIn +"\n"+berthTime}</a>`
+                }else{
+                    berthingTime.innerText = datePassedIn +"\n"+berthTime;
+                }
+                
+                let date = listOfVessels[vessel]['departingTime'].split("T")[0]
+                let time = listOfVessels[vessel]['departingTime'].split("T")[1];
+                departingTime.innerHTML = `<span class="d-lg-block">${date}</span><span> ${time}</span>`;
+                berthNumber.innerText = listOfVessels[vessel]['berthNumber'] == null ? "-": listOfVessels[vessel]['berthNumber'];
+                status.innerText = listOfVessels[vessel]['status'];
+                change.innerText = listOfVessels[vessel]['berthingTimeChangeCount'];
+                action.innerHTML = `<i id="subscribeBtn" class="fa fa-times subFont text-danger" userID="${userID}" name="${name.innerText}" shiftSeqN="${shiftSeqN}"  onclick="removeSubscription(this) "></i>`;
+
+                
+                vesselRow.append(berthingTime,name,outVoyageNumber,departingTime,berthNumber,status,change,action);
+                dataTable.row.add($(vesselRow)).draw();
+            }
+
+        }
+
+        $(document).ready(async function () {
+
+            // On hover of updated berth time show initial berth time
+            $('[data-toggle="originalTimeToolTip"]').tooltip();  
+            var token = $("#token").val();
+            let name2 = $("#name2").val();
+            let userID = $("#userID").val();
+
+            let date = formatDateAPI(new Date);
+            retreieveVesselInformation(userID);
+
+                    
+            // Adds the class active to the the dashboard
+            $('.subscription').addClass("active");
+          
+            // Shows a pop up when user clicks on the ? button beside Action
+            $('#actionpop').popover();   
+            
+            // Creates the datatable
+            $('#vesselInfoTable').DataTable();
+        
+           
+        });
+    </script>
+</body>
+</html>

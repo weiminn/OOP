@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+    <!-- Nav Bar -->
+    <nav th:fragment="header" class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+            
+        <!-- Hamburger menu to show up on mobile -->
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navBar" aria-controls="navBar" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Vessel Tracker Name -->
+        <a class="navbar-brand" href="#">Vessel Tracker</a>
+    
+        <div class="collapse navbar-collapse" id="navBar">
+
+            <ul class="navbar-nav mr-auto desktop-navbar">
+                <!-- Schedules Tab -->
+                <li class="nav-item dashboard">
+                    <a class="nav-link" th:href="@{/dashboard}">
+                        <i class="fa fa-calendar text-light "></i> Schedules
+                    </a>
+                </li>
+                <!-- Favourites Tab -->
+                <li class="nav-item ml-4 favourites" >
+                    <a class="nav-link fav" th:href="@{/favourites}">
+                        <i class="fa fa-lg fa-star text-warning"></i> Favourites
+                        <span id="favbadge" class="badge text-light">0</span>
+                    </a>
+                </li>
+                <!-- Subscriptions Tab -->
+                <li class="nav-item ml-4 subscription" >
+                    <a class="nav-link sub" th:href="@{/subscription}">
+                        <i class="fa fa-lg fa-envelope-square text-primary bg-light rounded"></i> Subscriptions
+                        <span id="subbadge" class="badge text-light">0</span>
+                    </a>
+                </li>
+            </ul>
+
+            <!-- ======================== -->
+            <!-- ONLY SHOW IN MOBILE VIEW -->
+            <!-- ======================== -->
+            <ul class="navbar-nav mr-auto mobile-navbar">
+            
+                <!-- Schedules Tab -->
+                <li class="nav-item dashboard">
+                    <a class="nav-link" th:href="@{/dashboard}">
+                        <i class="fa fa-calendar text-light "></i> Schedules
+                    </a>
+                </li>
+                <!-- Favourites Tab -->
+                <li class="nav-item favourites">
+                    <a class="nav-link" th:href="@{/favourites}">
+                        <i class="fa fa-lg fa-star text-warning"></i> Favourites
+                    </a>
+                </li>
+                <!-- Subscriptions Tab -->
+                <li class="nav-item subscription">
+                    <a class="nav-link" th:href="@{/subscription}">
+                        <i class="fa fa-lg fa-envelope-square text-primary bg-light rounded"></i> Subscriptions
+                    </a>
+                </li>
+
+                <!-- Change Password Tab -->
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/resetPasswordLoggedIn}">
+                        <i class="fa fa-exchange text-light"></i> Change Password
+                    </a>
+                </li>
+
+                <!-- Logout Tab -->
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/logout}">
+                        <i class="fa fa-power-off text-light"></i> Logout
+                    </a>
+                </li>
+            </ul>
+
+            <!-- Seperated Ul to have settings to be on the right -->
+            <ul class="navbar-nav mr-2 desktop-navbar">
+                <!-- Dropdown -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Account
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right shadow-lg" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" th:href="@{/resetPasswordLoggedIn}">
+                            <i class="fa fa-exchange"></i> Change Password
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" th:href="@{/logout}">
+                            <i class="fa fa-power-off"></i> Logout 
+                        </a>
+                    </div>
+                </li>
+            </ul>
+
+        </div>
+    </nav>
+</body>
+</html>
+
+

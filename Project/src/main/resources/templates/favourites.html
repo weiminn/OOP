@@ -1,0 +1,501 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Favourites</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <!-- Font-Awesome CDN -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" crossorigin="anonymous">
+    
+    <!-- Owl Carousell CSS -->
+    <link rel="stylesheet" th:href="@{/css/owl.carousel.min.css}">
+    
+    <link rel="stylesheet" th:href="@{/css/owl.theme.default.min.css}">
+
+    <link rel="stylesheet" th:href="@{/css/fullcalendar.main.min.css}">
+
+    <!-- External CSS -->
+    <link rel="stylesheet" th:href="@{/css/external.css}">
+
+
+    <!-- Internal CSS -->
+    <style>
+        .item{
+            height: 100%;
+            width: 100%;
+        }
+
+        .font-size-40{
+            font-size: 40px;
+        }
+        
+        .zIndex1 {
+            z-index: 10;
+        }
+
+        .border-3 {
+            border-width:3px !important;
+        }
+
+        .remove_fav{
+            font-size: larger;
+        }
+
+        .icon2em{
+            font-size: 2em;
+        }
+
+        @media (max-width: 576px) {
+            .fc-toolbar {
+                display: flex;
+                flex-direction: column;
+                margin-bottom: 0!important;
+            }
+            .fc-toolbar > div {
+                margin-bottom: 0.5em!important;
+            }
+        }
+    </style>
+ 
+</head>
+<body>
+    <!-- Navbar -->
+    <div th:insert="fragments/header :: header"></div>
+
+    <!-- The main contents -->
+    <input id="userId" type="hidden" name="userId" th:value="${session.id}">
+    <div class="container" >
+        <!-- High Level Analytics -->
+        <div class="container mt-3">
+            <!-- Owl Caurousel -->
+            <div class="d-md-none">
+                <div class="owl-carousel owl-theme">
+                    <div class="item mx-auto d-flex align-items-center justify-content-center">
+                        <div class="card w-100 h-100 border-success green-filter" style="cursor: pointer;">
+                            <div class="card-header text-success"><i class="fa fa-circle text-success" aria-hidden="true"></i> No Change </div>
+                            <div class="card-body text-success text-center">
+                                <p class="card-text font-size-40 font-weight-bold green-count">-</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="item mx-auto d-flex align-items-center justify-content-center">
+                        <div class="card w-100 h-100 border-warning yellow-filter" style="cursor: pointer;">
+                            <div class="card-header text-warning"><i class="fa fa-circle text-warning" aria-hidden="true"></i> < 1 Hour Change</div>
+                            <div class="card-body text-warning text-center">
+                                <p class="card-text font-size-40 font-weight-bold yellow-count">-</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="item mx-auto d-flex align-items-center justify-content-center">
+                        <div class="card w-100 h-100 border-danger red-filter" style="cursor: pointer;">
+                            <div class="card-header text-danger"><i class="fa fa-circle text-danger" aria-hidden="true"></i> >= 1 Hour Change</div>
+                            <div class="card-body text-danger text-center">
+                                <p class="card-text font-size-40 font-weight-bold red-count">-</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Card Group -->
+            <div class="d-none d-md-block">
+                <div class="row">
+                    <div class="col col-md-4">
+                        <div class="card h-100 border-success green-filter" style="cursor: pointer;">
+                            <div class="card-header text-success"><i class="fa fa-circle text-success" aria-hidden="true"></i> No Change</div>
+                            <div class="card-body text-success text-center">
+                                <p class="card-text font-size-40 font-weight-bold green-count">-</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col col-md-4">
+                        <div class="card h-100 border-warning yellow-filter" style="cursor: pointer;">
+                            <div class="card-header text-warning"><i class="fa fa-circle text-warning" aria-hidden="true"></i> < 1 Hour Change</div>
+                            <div class="card-body text-warning text-center">
+                                <p class="card-text font-size-40 font-weight-bold yellow-count">-</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col col-md-4">
+                        <div class="card h-100 border-danger red-filter" style="cursor: pointer;">
+                            <div class="card-header text-danger"><i class="fa fa-circle text-danger" aria-hidden="true"></i> >= 1 Hour Change</div>
+                            <div class="card-body text-danger text-center">
+                                <p class="card-text font-size-40 font-weight-bold red-count">-</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container my-3">
+            <h5> Favourites <i id="reload" class="fa fa-refresh ml-1" aria-hidden="true" style="cursor: pointer;"></i></h5>
+            
+            <div class="form-row" style="max-width: 80%;">
+                <div class="form-group col-md-6">
+                    <label for="datepicker">Search by Date</label>
+                    <input class="form-control" type="date" id="datepicker">
+                </div>
+                <div class="form-group col-md-6">
+                  <label for="search">Search by Name / In-Vog No.</label>
+                  <input class="form-control" type="text" id="search" placeholder="Search by Name / In-Voy No.">
+                </div>
+              </div>
+            
+
+        </div>
+
+        <!-- Card View -->
+        <div class="container my-3">
+            <div class="row" id="favCards">
+            </div>
+            
+              
+              
+        </div>
+       
+    </div>
+
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <!-- Owl Carousel JS + Mousewheel External Library-->
+    <script th:src="@{/js/owl.carousel.min.js}"></script>
+    <script th:src="@{/js/jquery.mousewheel.min.js}"></script>
+    <script th:src="@{/js/fullcalendar.main.min.js}"></script>
+
+    <script th:src="@{/js/navBarBadgeValues.js}" crossorigin="anonymous"></script>
+    
+    <script th:inline="javascript">        
+        localStorage.setItem("noOfFavAdded", JSON.stringify([]));
+
+        $('#favbadge').text(JSON.parse(localStorage.getItem("noOfFavAdded")).length);
+                
+        // Show or hide badge based on value
+        if($('#favbadge').text() <= 0){
+            $('#favbadge').hide();
+        }else{
+            $('#favbadge').show();
+        }
+  
+        // Add Js here
+        var token = [[${session.token}]];
+        $('.owl-carousel').owlCarousel({ 
+            loop:true,
+            margin:10,
+            navigation: false,
+            responsiveClass:true,
+            responsive:{
+                0:{
+                    items:1,
+                    nav:true
+                },
+                600:{
+                    items:1,
+                    nav:false
+                },
+                1000:{
+                    items:1,
+                    nav:true,
+                    loop:false
+                }
+            }
+        })
+        $('.owl-carousel').on('mousewheel', '.owl-stage', function (e) {
+            if (e.deltaY<0) {
+                $('.owl-carousel').trigger('next.owl');
+            } else {
+                $('.owl-carousel').trigger('prev.owl');
+            }
+            e.preventDefault();
+        });
+
+        function getHighLevelAnalytics(fav, subs) {
+            let group = []
+            let green = 0, red = 0, yellow = 0
+
+            fav.map((val) => {
+                if (val.updatedBerthingTime == null){
+                    green++
+                    group.push({...val, degree: "success", isSub: false})
+                }else{
+                    let berthingTime = new Date(val.berthingTime)
+                    let updatedBerthingTime = new Date(val.updatedBerthingTime)
+                    let diff = Math.abs(berthingTime.getTime() - updatedBerthingTime.getTime())
+                    diff = Math.floor(diff / (1000*60));
+
+                    if (diff >= 60){
+                        red++
+                        group.push({...val, degree: "danger", isSub: false})
+                    }else if(diff == 0 ){
+                        green++
+                        group.push({...val, degree: "success", isSub: false})
+                    }else{
+                        yellow++
+                        group.push({...val, degree: "warning", isSub: false})
+                    }
+                }
+            })
+
+            subs.map((val) => {
+                for (let i = 0; i < group.length; i++) {
+                    let obj = group[i];
+                    if (obj.name == val.name && obj.incomingVoyageNumber == val.incomingVoyageNumber && obj.shiftSeqN == val.shiftSeqN ){
+                        group[i] = {...obj, isSub: true}
+                    }
+                }
+            })
+        
+            $(".red-count").text(red);
+            $(".green-count").text(green);
+            $(".yellow-count").text(yellow);
+            return group
+        }
+
+        function loadCards(fav) {
+            let DateTimeOpt = {
+                year: "numeric",
+                month: "numeric",
+                day: "numeric",
+                hour: "numeric",
+                minute: "numeric",
+                hour12: false,
+            };
+           
+            fav.map((val) => {
+              
+                let {degree, berthNumber, berthingTime, 
+                departingTime, name, outVoyageNumber, 
+                incomingVoyageNumber, berthingTimeChangeCount, 
+                updatedBerthingTime,status,shiftSeqN, isSub} = val
+               
+                let berthingTimeString
+                berthingTimeString = new Date(berthingTime).toLocaleString([], DateTimeOpt);
+                if (updatedBerthingTime != null){
+                    berthingTimeString = new Date(updatedBerthingTime).toLocaleString([], DateTimeOpt);
+                }
+                
+                let subStyle = isSub ? "text-primary" : ""
+                let departingTimeString = new Date(departingTime).toLocaleString([], DateTimeOpt);
+                $("#favCards").append(`
+                <div class="fav-col col-sm-12 col-md-6 col-lg-4">
+                    <div class="fav-card card border-${degree} border-3 mb-3">
+                        <div class="card-header">
+                            <span class="float-right">
+                                <i data-name='${name}' data-vogno='${incomingVoyageNumber}'  data-shiftseqno='${shiftSeqN}' class="fa icon2em fa-envelope-square ${subStyle} toggle_sub" aria-hidden="true"></i>
+                                <i data-name='${name}' data-vogno='${incomingVoyageNumber}'  data-shiftseqno='${shiftSeqN}' class="fa icon2em fa-times remove_fav ml-2" aria-hidden="true"></i>
+                            </span> 
+                            <span>${name}<br>(${incomingVoyageNumber})</span>
+                               
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">
+                                Outgoing Voyage-No : ${outVoyageNumber} <br>
+                                Berthing : ${berthingTimeString}<br>
+                                Departure : ${departingTimeString}<br>
+                                Berth No : ${berthNumber == null ? "-" : berthNumber}<br>
+                                Status : ${status} <br>
+                                Time Change Count : ${berthingTimeChangeCount}<br>
+                            </p>
+                        </div>
+                    </div>
+                </div>`)
+            })
+        }
+        
+        function filterAll(tag) {
+            $('.fav-col').addClass('d-none');
+            $("#datepicker").val("")
+            $("#search").val("")
+            let allElem = $(".fav-col").find(`${tag}`).parent().removeClass('d-none')
+        }
+
+        function filterDate(dateString){
+            let date = new Date(dateString);
+            let dateFormat = `${("0" + date.getDate()).slice(-2)}/${("0" + (date.getMonth() + 1)).slice(-2)}/${date.getFullYear()}`
+
+            if (dateFormat != ""){
+                let allElem = $(".fav-card").find(`.card-text:not(:contains('${dateFormat}'))`).parent().parent().parent().addClass('d-none')
+            }
+        }
+        
+        
+
+        $(document).ready(async () => {
+            // Adds the class active to the the favourites tab
+            $('.favourites').addClass("active");
+
+            var requestOptions = {
+                method: 'GET',
+                mode: 'cors',
+                headers: new Headers({
+                    'Authorization': 'Bearer ' + token
+                }), 
+            };
+            let id = $("#userId").val();
+            let favourites = await fetch(`favourites/${id}`, requestOptions)
+                .then(response => response.text())
+                .then(result => {return JSON.parse(result)})
+                .catch(error => console.log('error', error));
+
+            let subscriptions = await fetch(`subscriptions/${id}`, requestOptions)
+                .then(response => response.text())
+                .then(result => {return JSON.parse(result)})
+                .catch(error => console.log('error', error));
+
+            let favWithDegreeSubs = getHighLevelAnalytics(favourites, subscriptions);
+
+            
+            console.log(favWithDegreeSubs)
+
+            loadCards(favWithDegreeSubs);
+            
+            $("#search").keyup(() => {
+                $('.fav-col').removeClass('d-none');
+                
+                var filter = $("#search").val().toUpperCase(); // get the value of the input, which we filter on
+                
+                if (filter != ""){
+                    let allElem = $(".fav-card").find(`.card-header:not(:contains('${filter}'))`).parent().parent().addClass('d-none')
+                }
+
+                let date = $("#datepicker").val();
+                if (date != ""){
+                    filterDate(date);
+                }
+                
+            })
+
+            $(".red-filter").click(()=> {
+                filterAll(".border-danger")
+            })
+            $(".yellow-filter").click(()=> {
+                filterAll(".border-warning")
+            })
+            $(".green-filter").click(()=> {
+                filterAll(".border-success")
+            })
+
+            $("#reload").click(()=> {
+                $('.fav-col').removeClass('d-none');
+                $("#datepicker").val("")
+                $("#search").val("")
+            })
+
+            $("#datepicker").change(()=>{
+                let date = $("#datepicker").val();
+                $('.fav-col').removeClass('d-none');
+                filterDate(date)
+            })
+
+            $(".remove_fav").click(async (e)=>{
+                
+                let {name, vogno,shiftseqno} = e.target.dataset
+                
+                let isRemove = confirm(`Are you sure you want to remove ${name} (${vogno}) from favourites?`)
+                if (isRemove){
+
+                    var formdata = new FormData();
+                    formdata.append("userID", id);
+                    formdata.append("incoming_voyage", vogno);
+                    formdata.append("vessel", name);
+                    formdata.append("shiftSeqN", shiftseqno);
+
+                    
+
+                    var requestOptions = {
+                        method: 'POST',
+                        mode: 'cors',
+                        headers: new Headers({
+                            'Authorization': 'Bearer ' + token
+                        }),
+                        body: formdata
+                    };
+
+                    let results = await fetch(`favourites/removeFav`, requestOptions)
+                        .then(response => response.text())
+                        .then(result => {return `${result} ${name} (${vogno}) from favourites`})
+                        .catch(error => console.log('error', error));
+                    
+                    //alert(results)
+                    location.reload();
+                    
+                    
+                }
+            })
+            
+            $(".toggle_sub").click(async (e)=>{
+                let {name, vogno, shiftseqno} = e.target.dataset
+                let url
+                var formdata = new FormData();
+                formdata.append("userID", id);
+                formdata.append("incoming_voyage", vogno);
+                formdata.append("vessel", name);
+                formdata.append("shiftSeqN", shiftseqno);
+                //remove
+                let state = e.target.classList.contains('text-primary')
+                if (state){
+                    url = "/subscriptions/removeSub"
+                    
+                }else{
+                    url = "/subscriptions/addSub"
+                }
+                var requestOptions = {
+                    method: 'POST',
+                    mode: 'cors',
+                    headers: new Headers({
+                        'Authorization': 'Bearer ' + token
+                    }),
+                    body: formdata
+                };
+
+                let results = await fetch(url, requestOptions)
+                    .then(response => response.text())
+                    .then(result => {return `${result} ${name} (${vogno}) from Subscription`})
+                    .catch(error => console.log('error', error));
+                    
+                console.log(results);
+                e.target.classList.toggle('text-primary');
+
+                // Get the current value
+                let val = parseInt(localStorage.getItem("noOfSubAdded"));
+                if (state){
+                    let val = JSON.parse(localStorage.getItem("noOfSubAdded"));
+
+                    let index = val.indexOf(id+name+vogno+shiftseqno);
+                    console.log(index);
+                    if(index!=-1){
+                        val.splice(index,1);
+                        localStorage.setItem("noOfSubAdded", JSON.stringify(val));
+                    }
+                    $('#subbadge').text(val.length);
+                }else{
+                    let val = JSON.parse(localStorage.getItem("noOfSubAdded"));
+                    
+                    val.push(id+name+vogno+shiftseqno);
+                    localStorage.setItem("noOfSubAdded", JSON.stringify(val));
+                    $('#subbadge').text(val.length);
+                }
+
+                // Show or hide badge based on value
+                if($('#subbadge').text() <= 0){
+                    $('#subbadge').hide();
+                }else{
+                    $('#subbadge').show();
+                }
+                
+            })
+
+
+        })
+    </script>
+</body>
+</html>

@@ -1,0 +1,530 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Dashboard</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <!-- Font-Awesome CDN -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" crossorigin="anonymous">
+
+    <!-- DataTable CSS-->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/dataTables.bootstrap4.min.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.5/css/responsive.bootstrap4.min.css" crossorigin="anonymous">
+
+    <!-- External CSS -->
+    <link rel="stylesheet" th:href="@{/css/external.css}">
+    
+    <!-- Internal CSS -->
+    <style>
+        #vesselInfoTable{
+            background-color: white;
+        }
+        .subFont{
+            font-size: 35px;
+        }
+        .mytable>tbody>tr>td, 
+        .mytable>tbody>tr>th, 
+        .mytable>tfoot>tr>td, 
+        .mytable>tfoot>tr>th, 
+        .mytable>thead>tr>td, 
+        .mytable>thead>tr>th {
+            padding: 10px;
+        }
+
+        #vesselInfoTable_wrapper{
+            margin-bottom: 48px;
+        }
+
+        td.child{
+            text-align: left;
+        }
+    </style>
+ 
+</head>
+<body>
+    <!-- Navbar -->
+    <div th:insert="fragments/header :: header"></div>
+    
+    <!-- Store Session Values -->
+    <input id="token" type="hidden" name="token" th:value="${session.token}">
+    <input id="userID" type="hidden" name="userID" th:value="${session.id}">
+    <input id="name" type="hidden" name="name" th:value="${session.name}">
+
+    <!-- The Container that holds the datatable and Dropdownlist for dates -->
+    <div class="container">
+
+        <!-- The dropdown list to hold the next 7 days date -->
+        <div class="dropdown my-3">
+            <div class="input-group-btn">
+                <button class="btn btn-light dropdown-toggle mx-auto d-block col-7 shadow-sm " type="button" id="daysDropdownList" data-toggle="dropdown" 
+                    aria-haspopup="true" aria-expanded="false" >
+                    <!-- Today-->
+                </button>
+
+                <div id="dateDDL" class="dropdown-menu col-7 dropdown-striped shadow-lg " aria-labelledby="daysDropdownList">
+                    <!-- Dates will populate here form JS below -->
+                </div>
+            </div>
+        </div> 
+
+        <div class="col-lg-4">
+            <table class="table table-sm table-bordered">
+                <tbody>
+                    <tr>
+                        <th colspan="2" style="background: white;text-align: center;" scope="col">Change in Berth timing:</th>
+                    </tr>       
+                    <tr>
+                        <td style="text-align: center;" class="table-danger"> > than an hour</td>
+                        <td style="text-align: center;" class="table-warning"> < than an hour</td>
+                    </tr>       
+                </tbody>
+              </table>
+        </div>
+
+        <!-- The datatable -->
+        <table id="vesselInfoTable" class="table mytable table-hover table-striped table-bordered dt-responsive nowrap shadow-sm text-center" style="width:100%">
+            <thead> 
+                <tr>
+                    <th>Berth Time</th>
+                    <th>Vessel Name</th>
+                    <!-- <th>In-Voy No.</th> -->
+                    <th>Out-Voy No.</th>
+                    <th>Departing On</th>
+                    <th>Berth No.</th>
+                    <th>Status</th>
+                    <th>Change</th>
+                    <th>
+                        Action <a href="#" 
+                                        id="actionpop" 
+                                        title="Action" 
+                                        data-toggle="popover" 
+                                        data-trigger="focus" 
+                                        data-placement="top" 
+                                        data-html="true" 
+                                        data-content="<p>
+                                                        <i class='fa fa-star-o text-warning ml-1 fav subFont'></i>
+                                                        Click to add/remove vessel from favourites
+                                                     <p/> 
+                                                     <p>
+                                                        <i class='fa fa-envelope-square text-secondary ml-2 subFont'></i>
+                                                        Click to add/remove vessseel from subscription list
+                                                     <p/> ">
+                                    <i class="fa fa-lg fa-question-circle-o text-dark" ></i>
+                               </a>
+                    </th>
+                </tr>
+            </thead>
+
+            
+            <tbody><!-- Data Dynamically Populated --></tbody>
+        </table>
+    </div>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    
+
+    <!-- Meant for DataTable -->
+    <!-- <script src="https://code.jquery.com/jquery-3.5.1.js" crossorigin="anonymous"></script> -->
+    <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap4.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.datatables.net/responsive/2.2.5/js/dataTables.responsive.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.datatables.net/responsive/2.2.5/js/responsive.bootstrap4.min.js" crossorigin="anonymous"></script>
+
+    <script th:src="@{/js/navBarBadgeValues.js}" crossorigin="anonymous"></script>
+    
+    <script>
+        /** 
+        *   Formats Date Object 
+        *   @params Date   : The date object to be formatted
+        *   @return String : The formatted date "dd/mm/yyyy"
+        */
+        function formatDate(date) {
+            return date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
+        }
+        
+        /** 
+        *   Formats Date Object 
+        *   @params Date   : The date object to be formatted
+        *   @return String : The formatted date "yyyy/mm/dd"
+        */
+        function formatDateAPI(date) {
+            return date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
+        }
+
+        /** 
+        *   Toggles the favourite icon 
+        *   Add or subtract fav badge icon by 1 each time the fav icon is click or unclicked
+        *   @params obj    : The exact vessel obj from datatable to toggle
+        */
+        function toggleFav(obj){
+
+            let userID = obj.getAttribute("userID");
+            let vesselName = obj.getAttribute("name");
+            //let inVoyage = obj.getAttribute("inVoyage");
+            let shiftSeqN = obj.getAttribute("shiftSeqN");
+            // Added to Fav
+            if(obj.classList.value.includes("fa-star-o")){
+                obj.classList.remove("fa-star-o");
+                obj.classList.add("fa-star");
+                
+                let name = vesselName.split("(")[0].trim();
+                let inVoyage = vesselName.split("(")[1];
+                inVoyage = inVoyage.slice(0,-1);
+
+                addToFav(userID,name,inVoyage,shiftSeqN);
+             
+                // Get the current favVesslArray from localStorage
+                let val = JSON.parse(localStorage.getItem("noOfFavAdded"));
+       
+                val.push(userID+vesselName+shiftSeqN);
+                localStorage.setItem("noOfFavAdded", JSON.stringify(val));
+           
+                $('#favbadge').text(val.length);
+
+            }
+            // Remove from Fav
+            else if(obj.classList.value.includes("fa-star")){
+                obj.classList.remove("fa-star");
+                obj.classList.add("fa-star-o");
+
+                let name = vesselName.split("(")[0].trim();
+                let inVoyage = vesselName.split("(")[1];
+                inVoyage = inVoyage.slice(0,-1);
+
+                //REMOVE HERE
+                removeFromFav(userID,name,inVoyage,shiftSeqN);
+
+                // Get the current favVesslArray from localStorage
+                let val = JSON.parse(localStorage.getItem("noOfFavAdded"));
+
+                // Search to see if the fav vessl being removed contains in val
+                // if no index will be -1 
+                // if yes index will be returned
+                let index = val.indexOf(userID+vesselName+shiftSeqN);
+
+                if(index!=-1){
+                    val.splice(index,1);
+                    localStorage.setItem("noOfFavAdded", JSON.stringify(val));
+                }
+                
+                $('#favbadge').text(val.length);
+
+            }
+
+            // Show or hide badge based on value
+            if($('#favbadge').text() <= 0){
+                $('#favbadge').hide();
+            }else{
+                $('#favbadge').show();
+            }
+        }
+
+        // If favourites is click reset all badge values and hide it
+        // function resetFavValues(){
+        //     $('#favbadge').text(0);
+        //     $('#favbadge').hide();
+        // }
+
+        /** 
+        *   Toggles the subscription icon 
+        *   @params obj    : The exact vessel obj from datatable to toggle
+        */
+        function toggleSubscription(obj){
+            let userID = obj.getAttribute("userID");
+            let vesselName = obj.getAttribute("name");
+            //let inVoyage = obj.getAttribute("inVoyage");
+            let shiftSeqN = obj.getAttribute("shiftSeqN");
+
+
+            if(obj.classList.value.includes("text-secondary")){
+                obj.classList.remove("text-secondary");
+                obj.classList.add("text-primary");
+
+                let name = vesselName.split("(")[0].trim();
+                let inVoyage = vesselName.split("(")[1];
+                inVoyage = inVoyage.slice(0,-1);
+
+                addToSubscription(userID,name,inVoyage,shiftSeqN);
+
+
+                let val = JSON.parse(localStorage.getItem("noOfSubAdded"));
+                
+                val.push(userID+name+inVoyage+shiftSeqN);
+                localStorage.setItem("noOfSubAdded", JSON.stringify(val));
+
+                $('#subbadge').text(val.length);
+
+            }else if(obj.classList.value.includes("text-primary")){
+                obj.classList.remove("text-primary");
+                obj.classList.add("text-secondary");
+
+                let name = vesselName.split("(")[0].trim();
+                let inVoyage = vesselName.split("(")[1];
+                inVoyage = inVoyage.slice(0,-1);
+
+                removeFromSubscription(userID,name,inVoyage,shiftSeqN);
+
+                let val = JSON.parse(localStorage.getItem("noOfSubAdded"));
+
+                let index = val.indexOf(userID+name+inVoyage+shiftSeqN);
+
+                console.log(index);
+
+                if(index!=-1){
+                    val.splice(index,1);
+                    localStorage.setItem("noOfSubAdded", JSON.stringify(val));
+                }
+
+
+                $('#subbadge').text(val.length);
+                
+            }
+
+            // Show or hide badge based on value
+            if($('#subbadge').text() <= 0){
+                $('#subbadge').hide();
+            }else{
+                $('#subbadge').show();
+            }
+        }
+
+
+        function makeRequest(url,method,values) {
+            return new Promise(function (resolve, reject) {
+
+                var token = $("#token").val();
+
+                let request = new XMLHttpRequest();
+
+                request.open(method, url);
+                request.onload = function () {
+                    if (this.status >= 200 && this.status < 300) {
+                        resolve(request.response);
+                    } else {
+                        reject({
+                            status: this.status,
+                            statusText: request.statusText
+                        });
+                    }
+                };
+                request.onerror = function () {
+                    reject({
+                        status: this.status,
+                        statusText: request.statusText
+                    });
+                };
+                request.setRequestHeader('Authorization', 'Bearer ' + token)
+                request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                request.send(values);
+            });
+        }
+
+        async function addToFav(userID,name,inVoyage,shiftSeqN){
+            let result = await makeRequest("/favourites/addFav", "POST", "userID="+userID+"&incoming_voyage="+inVoyage+"&vessel="+name+"&shiftSeqN="+shiftSeqN);
+            if (result = "Saved"){
+                console.log("Successfully Added");
+            }
+        }
+
+
+        async function removeFromFav(userID,name,inVoyage,shiftSeqN){
+            let result = await makeRequest("/favourites/removeFav", "POST", "userID="+userID+"&incoming_voyage="+inVoyage+"&vessel="+name+"&shiftSeqN="+shiftSeqN);
+            if (result = "Deleted"){
+                console.log("Successfully Removed");
+            }
+        }
+
+        async function addToSubscription(userID,name,inVoyage,shiftSeqN){
+            let result = await makeRequest("/subscriptions/addSub", "POST", "userID="+userID+"&incoming_voyage="+inVoyage+"&vessel="+name+"&shiftSeqN="+shiftSeqN);
+            if (result = "Saved"){
+                console.log("Successfully Subscribed");
+            }
+        }
+
+
+        async function removeFromSubscription(userID,name,inVoyage,shiftSeqN){
+            let result = await makeRequest("/subscriptions/removeSub", "POST", "userID="+userID+"&incoming_voyage="+inVoyage+"&vessel="+name+"&shiftSeqN="+shiftSeqN);
+            if (result = "Deleted"){
+                console.log("Successfully Removed Subscription");
+            }
+        }
+
+        async function retreieveVesselInformation(datePassedIn){
+            let userID = $("#userID").val();
+
+            let result = await makeRequest("/vessel/date=" + datePassedIn + "&userID=" +userID, "GET", "");
+
+            var listOfVessels = JSON.parse(result);
+
+            var dataTable = $('#vesselInfoTable').DataTable();
+            dataTable.clear().draw();
+            
+            for(vessel in listOfVessels){
+                let vesselRow = document.createElement("tr");
+                let name = document.createElement("td");
+                // let inVoyageNumber = document.createElement("td");
+                let outVoyageNumber = document.createElement("td");
+                let berthingTime = document.createElement("td");
+                let departingTime = document.createElement("td");
+                let berthNumber = document.createElement("td");
+                let status = document.createElement("td");
+                let change = document.createElement("td");
+                let action = document.createElement("td");
+                
+                var shiftSeqN = listOfVessels[vessel]["shiftSeqN"];
+                var updatedBerthTime = listOfVessels[vessel]['updatedBerthingTime'];
+                var initialBerthTime = listOfVessels[vessel]['berthingTime'];
+
+                var berthTime = initialBerthTime.split("T")[1];
+
+
+                if(updatedBerthTime != null){
+                    berthTime = updatedBerthTime.split("T")[1];
+
+                    // If updated berth time is later initial berth time
+                    if(Date.parse(updatedBerthTime) > Date.parse(initialBerthTime)){
+                        console.log("Updated time is later than intial berth time")
+                        // 3540000 milliseconds = 59 minutes
+                        if(Math.abs(Date.parse(updatedBerthTime) - Date.parse(initialBerthTime)) > 3540000){
+                            console.log("red");
+                            vesselRow.className = "table-danger";
+                        }else{
+                            console.log("yellow");
+                            vesselRow.className = "table-warning";
+                        }
+                    }
+                    // If updated berth time is earlier initial berth time
+                    else{
+                        // 3540000 milliseconds = 59 minutes
+                        if(Math.abs(Date.parse(initialBerthTime) - Date.parse(updatedBerthTime)) > 3540000){
+                            console.log("red");
+                            vesselRow.className = "table-danger";
+                        }else{
+                            console.log("yellow");
+                            vesselRow.className = "table-warning";
+                        }
+                        console.log("Updated time is earlier than intial berth time")
+                    }
+                }
+
+                name.innerText = listOfVessels[vessel]['name'] +"\n("+ listOfVessels[vessel]['incomingVoyageNumber'] + ")";
+                //inVoyageNumber.innerText = listOfVessels[vessel]['incomingVoyageNumber'];
+                outVoyageNumber.innerText = listOfVessels[vessel]['outVoyageNumber'];
+
+                if(updatedBerthTime != null){
+                    berthingTime.innerHTML = `<a data-toggle="originalTimeToolTip" data-placement="top" title="Intial Berthing Time: ${initialBerthTime.split("T")[0] +" "+ initialBerthTime.split("T")[1]}"><span class="d-block">${datePassedIn}</span><span>${berthTime}</span></a>`;
+                }else{
+                    berthingTime.innerHTML = `<span class="d-block">${datePassedIn}</span><span>${berthTime}</span>`;
+                }
+                
+                let date = listOfVessels[vessel]['departingTime'].split("T")[0]
+                let time = listOfVessels[vessel]['departingTime'].split("T")[1];
+                departingTime.innerHTML = `<span class="d-lg-block">${date}</span><span> ${time}</span>`;
+                berthNumber.innerText = listOfVessels[vessel]['berthNumber'] == null ? "-": listOfVessels[vessel]['berthNumber'];
+                status.innerText = listOfVessels[vessel]['status'];
+                change.innerText = listOfVessels[vessel]['berthingTimeChangeCount'];
+                
+                let isFavourited = listOfVessels[vessel]['isFavourited'];
+                if(isFavourited){
+                    action.innerHTML = `<i class="fa fa-2x fa-star text-warning ml-1 fav" userID="${userID}" name="${name.innerText}" shiftSeqN="${shiftSeqN}" onclick="toggleFav(this) "></i>`;
+                }else{
+                    action.innerHTML = `<i class="fa fa-2x fa-star-o text-warning ml-1 fav" userID="${userID}" name="${name.innerText}" shiftSeqN="${shiftSeqN}" onclick="toggleFav(this) "></i>`;
+                }
+
+
+                let isSubscribed = listOfVessels[vessel]['isSubscribed'];
+                if(isSubscribed){
+                    action.innerHTML += `<i class="fa fa-envelope-square text-primary ml-2 subFont" userID="${userID}" name="${name.innerText}" shiftSeqN="${shiftSeqN}" onclick="toggleSubscription(this)"></i>`;
+                }else{
+                    action.innerHTML += `<i class="fa fa-envelope-square text-secondary ml-2 subFont" userID="${userID}" name="${name.innerText}" shiftSeqN="${shiftSeqN}" onclick="toggleSubscription(this)"></i>`;
+                }
+                
+                vesselRow.append(berthingTime,name,outVoyageNumber,departingTime,berthNumber,status,change,action);
+                dataTable.row.add($(vesselRow)).draw();
+            }
+
+        }
+
+        $(document).ready(async function () {
+
+            // On hover of updated berth time show initial berth time
+            $('[data-toggle="originalTimeToolTip"]').tooltip();  
+
+            let date = formatDateAPI(new Date);
+            retreieveVesselInformation(date);
+
+            // var token = $("#token").val();
+            // let name = $("#name").val();
+            // let id2 = $("#id2").val();
+            // console.log(token, name, id2);
+
+            //let id = userID;
+            
+            // Adds the class active to the the dashboard
+            $('.dashboard').addClass("active");
+          
+            // Shows a pop up when user clicks on the ? button beside Action
+            $('#actionpop').popover();   
+
+            
+            // Creates the datatable
+            $('#vesselInfoTable').DataTable({
+                "pageLength": 25,
+                fixedHeader: {
+                    header: true,
+                    footer: false
+                }
+            } );
+        
+            // Populating drop downlist with the next 7 days (days & date)
+            var ddl = document.getElementById('dateDDL');
+
+            for(i=0; i<8; i++){
+                // New Date Object
+                var today = new Date;
+
+                //Icrement days from 0 to 7
+                today.setDate(today.getDate() + i); 
+
+                // Get the Day e.g. "Monday"
+                var day = today.toLocaleString('en-us', {weekday:'long'})
+               
+                // Only set day to "Today" for first iteration
+                if(i==0){
+                    var day = "Today";
+                    document.getElementById('daysDropdownList').innerText = day + " " +formatDate(today);
+                }
+
+                // Add day and date to the dropdownlist
+                ddl.innerHTML += `<a class="dropdown-item" style="text-align-last:center;" href="#">${day + " " +formatDate(today)}</a>`
+            
+                // Fencepost to exclude seperator for last value in the dropdownlist
+                if(i!=7){
+                    //Seperator
+                    ddl.innerHTML += `<div class="dropdown-divider"></div>`;
+                }
+            }
+
+            // Update the drop downlist button to display the date selected
+            $("#dateDDL a").click(async function(){
+                $(this).parents(".input-group-btn").find('.btn').text($(this).text());
+        
+                let date = $(this).text().split(" ")[1];
+                let reformatedDate = date.split("/")[2] +"-"+ date.split("/")[1] +"-"+ date.split("/")[0];
+
+                retreieveVesselInformation(reformatedDate);
+            });
+        });
+    </script>
+</body>
+</html>

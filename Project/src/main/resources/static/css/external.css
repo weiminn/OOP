@@ -1,0 +1,48 @@
+body{
+    background-color:#F0F2F5;
+}
+
+.fav{
+    position: relative;
+}
+.fav .badge {
+    position: absolute;
+    width: 18px;
+    top: -1px;
+    right: -10px;
+    border-radius: 50%;
+    background-color: red;
+    display: none;
+}
+
+.sub{
+    position: relative;
+}
+.sub .badge {
+    position: absolute;
+    width: 18px;
+    top: -1px;
+    right: -10px;
+    border-radius: 50%;
+    background-color: red;
+    display: none;
+}
+
+@media screen and (max-width : 1920px){
+    .mobile-navbar{
+        display:none;
+    }
+}
+    
+@media screen and (max-width : 767px){
+    .desktop-navbar{
+        display:none;
+    }
+    .mobile-navbar{
+        display:inline;
+    }
+}
+
+.container{
+    margin-top: 76px;
+}

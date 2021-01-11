@@ -1,0 +1,171 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <title>Register</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+  <!-- Internal CSS -->
+  <style>
+    body {
+      background-color: #F0F2F5;
+    }
+
+    .registerContainer {
+      /* float:right; */
+      border-radius: 7.5px;
+      margin-top: 0px;
+      background-color: white;
+      padding: 15px;
+    }
+
+    .registerContainer img {
+      width: 50px;
+    }
+
+    .row {
+      height: 100vh;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="row align-items-center">
+    <!-- Main container -->
+    <div class="container col-10 col-sm-8 col-md-6 col-lg-4 col-5 shadow-lg mx-auto d-block registerContainer">
+
+      <!-- Vessel Image -->
+      <img th:src="@{images/Vessel.png}" class="img-fluid mx-auto d-block">
+
+      <!-- Container Text -->
+      <p class="lead text-center text-secondary">Sign Up</p>
+      <hr>
+      <p class="lead text-center text-secondary">Please enter your details</p>
+
+      <!-- Register Form -->
+      <form id="register-form" th:action="@{user/registrationWeb}" method="post">
+
+        <!-- Name Field -->
+        <div class="form-group">
+          <input type="text" name="name" id="name" class="form-control" placeholder="Name">
+        </div>
+
+        <!-- Email Field -->
+        <div class="form-group">
+          <input type="email" name="email" id="email" class="form-control" placeholder="Email">
+        </div>
+
+        <!-- Password Field -->
+        <div class="form-group">
+          <input type="password" name="password" id="password" class="form-control" placeholder="Password">
+        </div>
+
+        <!-- Confirm Password Field -->
+        <div class="form-group">
+          <input type="password" name="cfmPassword" id="cfmPassword" class="form-control" placeholder="Confirm Password">
+        </div>
+
+        <!-- Error Messages -->
+        <div id="errorMsg" class="form-group" th:text="${formError}" style="color: red;"></div>
+
+        <!-- SignUp Button -->
+        <button type="submit" class="btn btn-success btn-block text-white" id="singUpBtn" disabled>Sign Up</button>
+
+        <!-- Seperator -->
+        <hr>
+
+        <!-- Return to Login Link -->
+        <a th:href="@{/login}">Return to Login</a>
+
+      </form>
+
+    </div>
+  </div>
+
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    
+  <!-- Optional JavaScript -->
+  <script>
+
+    var validEmails = "";
+    //step 1: create an XMLHttpRequest object to interact with the server
+    var request = new XMLHttpRequest();
+
+    //step 2: set onreadystatechange to specify what happens when a server response is received
+    request.onreadystatechange = function () {
+      if (this.readyState == 4 && this.status == 200) {
+          validEmails = this.responseText;
+          document.getElementById("email").setAttribute("placeholder", "Emails e.g.(" + this.responseText + ")");
+        }
+      };
+
+    //step 3: send the request to the server
+    request.open("POST", "/user/emailPlaceholders", true);
+    request.send();
+
+
+    function CheckPwd(pw, cfmpw) {
+
+      const errorMsg = document.getElementById("errorMsg");
+
+      if (pw === cfmpw) {
+        errorMsg.innerText = "";
+        return true;
+      }
+
+      errorMsg.innerText = "Passwords do not match";
+      document.getElementById("singUpBtn").disabled = true;
+      return false;
+    }
+
+    function CheckEmail(enteredEmail){
+      var re = /\S+@\S+\.\S+/;
+      //Check if it is a valid email first
+      if ((re.test(enteredEmail))) {
+
+        let emails = validEmails.split(",");
+        for(email of emails){
+
+          if(enteredEmail.split("@")[1] == email.trim()){
+            return true;
+          }
+        }
+        errorMsg.innerText = "";
+        errorMsg.innerText = "Your email does not belong to a qualified domain";
+        return false;
+      }
+      errorMsg.innerText = "";
+      errorMsg.innerText = "Please enter a valid email";
+      return false;
+    }
+
+    //on keyup, start the countdown
+    $('#password,#cfmPassword,#name,#email').keyup(function () {
+      //Only if the both password fields are not empty
+      if ($('#password').val() && $('#cfmPassword').val() && $('#name').val() && $('#email').val()) {
+        let isPasswordOk = CheckPwd( $('#password').val(), $('#cfmPassword').val() );
+        let isEmailOk    = CheckEmail( $('#email').val() );
+
+        if($('#name').val() && isEmailOk && isPasswordOk){
+          document.getElementById("singUpBtn").disabled = false;
+          return;
+        }
+       
+      }
+      document.getElementById("singUpBtn").disabled = true;
+    });
+
+  </script>
+</body>
+
+</html>
