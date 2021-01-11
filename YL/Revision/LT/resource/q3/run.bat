@@ -1,0 +1,1 @@
+java -cp libraries/log4j2/*;libraries/prebuilt/*;production;config labtest.VendingMachineTest

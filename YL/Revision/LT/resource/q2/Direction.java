@@ -1,0 +1,6 @@
+public enum Direction {
+    VERTICAL,
+    HORIZONTAL,
+    DIAGONAL_FORWARD_SLASH,
+    DIAGONAL_BACKWARD_SLASH;
+}

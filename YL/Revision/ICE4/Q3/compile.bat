@@ -1,0 +1,1 @@
+javac -cp lib/* -sourcepath sourceFiles -d classFiles sourceFiles/AnimalFarmTest.java

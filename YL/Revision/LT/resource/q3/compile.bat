@@ -1,0 +1,1 @@
+javac -cp libraries/log4j2/*;libraries/prebuilt/* -sourcepath source -d production source/labtest/VendingMachineTest.java

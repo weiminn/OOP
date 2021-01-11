@@ -1,7 +1,12 @@
 public class Q1 {
 
     public static int sumOfDigits(int number) {
-        return -1;
+        String numString = Integer.toString(Math.abs(number));
+        int total = 0;
+        for(int i = 0; i < numString.length(); i++){
+            total += Integer.parseInt(String.valueOf(numString.charAt(i)));
+        }
+        return total;
     }
     public static void main(String[] args) {
         System.out.println("Test 1");

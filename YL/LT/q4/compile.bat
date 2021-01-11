@@ -1,0 +1,1 @@
+javac -cp lib/log4j/*;lib/thymeleaf/*;conf -sourcepath src -d generated src/assessment/app/Example.java

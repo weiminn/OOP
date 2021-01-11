@@ -1,7 +1,10 @@
 /**
  * Created by yeowleong on 16/5/14.
  */
-public class Product {
+
+import java.text.*;
+
+public abstract class Product {
     private String name;
     private double price;
 

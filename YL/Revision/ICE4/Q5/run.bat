@@ -1,0 +1,1 @@
+java -cp lib/*;out demo.Tester

@@ -3,6 +3,9 @@
  */
 public abstract class DesigningMethods {
 
+    //JAVABEANS naming convention
+    //getter/setter methods start with get/is/set
+
     // Access modifier optional
     // Cannot be after return
     public final void nap(int minutes) throws InterruptedException {

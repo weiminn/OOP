@@ -7,6 +7,10 @@ public class MultipleVariables {
     String s1, s2;
     String s3 = "yes", s4 = "no";
 
+    //only one var initialized
+    String s5, s6 = "no"; 
+    String s7 = "yes", s8;
+
     //can initialize inline
     Double d0; Double d1;
 
@@ -20,8 +24,5 @@ public class MultipleVariables {
     cannot duplicate declarations in same statement
 
     */
-
-
-
 
 }

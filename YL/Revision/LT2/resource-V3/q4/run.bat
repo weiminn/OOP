@@ -1,0 +1,1 @@
+java -cp jackson-lib/*;data;poi-lib/*;poi-lib/lib/*;poi-lib/ooxml-lib/*;output q4.App

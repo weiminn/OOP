@@ -25,7 +25,7 @@ public class ArrayLists {
         //add to index
         list5.add(1, "str2");
 
-        //removing
+        //remove at index
         list5.remove(1);
         //removes only one match
         boolean res2 = list5.remove("str");

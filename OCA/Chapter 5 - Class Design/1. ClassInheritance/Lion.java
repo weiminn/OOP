@@ -5,10 +5,16 @@ public class Lion extends Animals {
     private int age;
 
     //compiler automatically inserts no-arg constructor
+    //if automatically inserted by compiler, cannot be called by other constructors because if other constructor exists, default will not be inserted by compiler
     public Lion() {
         //super not inserted if chained
         //super will be inserted in base ctor
+        //this can only be called from other constructors in the same class
         this("Default");
+
+        //DOES NOT COMPILE
+        //Lion("Default")
+        //constructors called only with "new" keyword
     }
 
     //base constructor

@@ -1,0 +1,1 @@
+javac -cp .\commons-csv-1.8\commons-csv-1.8.jar -d out .\App.java

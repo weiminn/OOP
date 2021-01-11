@@ -22,5 +22,8 @@ public class Mutability {
         sb.reverse();
 
         //charAt, indexOf, length, subString same as String
+
+        StringBuilder _sb = new StringBuilder("aaa");
+        System.out.println(_sb.insert(2, "bb"));
     }
 }

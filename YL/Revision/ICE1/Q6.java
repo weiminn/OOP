@@ -22,6 +22,33 @@ public class Q6 {
     // program for exact output of this method.
     public static boolean matchStrings(String str1, String str2) {
         // Modify the code below to return the correct value.
+        String toPrint = "";
+        Queue<Character> s2Q = new ArrayDeque<>();
+        for(int i = 0; i < str2.length(); i++){
+            s2Q.add(str2.charAt(i));
+        }
+        
+        char c = s2Q.peek();
+        for(int j = 0; j < str1.length(); j++){
+            if(c == str1.charAt(j)){
+                toPrint += c;
+                s2Q.remove();
+                
+                if(!s2Q.isEmpty()){
+                    c = s2Q.peek();
+                }
+                
+            } else {
+                toPrint += " ";
+            }
+            
+            if(s2Q.isEmpty()){
+                System.out.println(str1);
+                System.out.println(toPrint);
+                return true;
+            }
+        }
+            
         return false;
     }
 

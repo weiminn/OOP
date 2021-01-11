@@ -25,7 +25,7 @@ public class LocalVariables {
 
         /*
         won't compile
-        compiler knows possibility of now assigned i
+        compiler knows possibility of not assigning i
         System.out.println(i);
         */
     }

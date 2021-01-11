@@ -1,15 +1,19 @@
 public class Swan {
 
-    // fields and instance initializers are run in the other they appear
+    //static variables and static initializers run first
+    //instance variables and initializers second
+    //in the order they appear
+    //constructors last
 
     int eggs;
 
     // code block outside a method
     // aka instance initializer
+    // called before constructor
     {
         System.out.println("Setting field");
 
-        name = "fluffy"; // doesn't compile; order matters
+        //name = "fluffy"; doesn't compile; order matters
     }
 
     String name;

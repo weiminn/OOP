@@ -9,7 +9,9 @@ public class For {
             }
         }
 
-        theLoop: for (int i = 0; i < 10; i++) {
+        int i = 0, j = 0;
+        //can redeclare outside variable
+        theLoop: for (i = 0, j = 0; i < 10; i++, j++) { //can use multiple variables
             if (i == 5){
                 //skips current iteration and continue from next iteration
                 continue theLoop;
@@ -18,8 +20,8 @@ public class For {
         }
 
         //infinte loop
-        for (int i = 0; i < args.length;) {
-            //update condition is optional
+        for (;;) {
+            //all three statements are optional
         }
     }
     

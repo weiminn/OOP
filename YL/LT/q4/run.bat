@@ -1,0 +1,1 @@
+java -cp lib/log4j/*;lib/thymeleaf/*;conf;generated assessment.app.Example

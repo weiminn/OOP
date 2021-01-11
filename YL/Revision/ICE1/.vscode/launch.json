@@ -1,0 +1,91 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Debug (Launch) - Current File",
+            "request": "launch",
+            "mainClass": "${file}"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-Q1<ICE1_17fea461>",
+            "request": "launch",
+            "mainClass": "Q1",
+            "projectName": "ICE1_17fea461"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-Q10<ICE1_17fea461>",
+            "request": "launch",
+            "mainClass": "Q10",
+            "projectName": "ICE1_17fea461"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-Q11<ICE1_17fea461>",
+            "request": "launch",
+            "mainClass": "Q11",
+            "projectName": "ICE1_17fea461"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-Q12<ICE1_17fea461>",
+            "request": "launch",
+            "mainClass": "Q12",
+            "projectName": "ICE1_17fea461"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-Q2<ICE1_17fea461>",
+            "request": "launch",
+            "mainClass": "Q2",
+            "projectName": "ICE1_17fea461"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-Q3<ICE1_17fea461>",
+            "request": "launch",
+            "mainClass": "Q3",
+            "projectName": "ICE1_17fea461"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-Q4<ICE1_17fea461>",
+            "request": "launch",
+            "mainClass": "Q4",
+            "projectName": "ICE1_17fea461"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-Q5<ICE1_17fea461>",
+            "request": "launch",
+            "mainClass": "Q5",
+            "projectName": "ICE1_17fea461"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-Q6<ICE1_17fea461>",
+            "request": "launch",
+            "mainClass": "Q6",
+            "projectName": "ICE1_17fea461"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-Q7<ICE1_17fea461>",
+            "request": "launch",
+            "mainClass": "Q7",
+            "projectName": "ICE1_17fea461"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-Q9<ICE1_17fea461>",
+            "request": "launch",
+            "mainClass": "Q9",
+            "projectName": "ICE1_17fea461"
+        }
+    ]
+}

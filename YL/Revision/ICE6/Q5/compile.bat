@@ -1,0 +1,1 @@
+javac -sourcepath src -d classes src/businessobject/ProductTest.java

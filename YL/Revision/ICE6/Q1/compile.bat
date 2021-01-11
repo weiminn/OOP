@@ -1,0 +1,1 @@
+javac -cp lib/* -sourcepath src -d classes src/app/TemplatingEngine.java

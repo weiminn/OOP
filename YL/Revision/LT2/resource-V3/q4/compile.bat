@@ -1,0 +1,1 @@
+javac -cp jackson-lib/*;data;poi-lib/*;poi-lib/lib/*;poi-lib/ooxml-lib/* -d output -sourcepath src src/q4/App.java

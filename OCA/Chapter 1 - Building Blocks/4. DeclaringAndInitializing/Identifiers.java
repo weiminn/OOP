@@ -9,8 +9,8 @@ public class Identifiers {
     //underscore
     Object _obj;
 
-    //subsequent can be number or $
-    Double d1g1t$;
+    //subsequent can be number, underscore or $ or alphabets only
+    Double d1g1t$_;
 
     /*
 

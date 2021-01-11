@@ -31,9 +31,13 @@ public class Array {
         int[] toSort = {2, 43, 6, 45};
         Arrays.sort(toSort);
 
+        Arrays.asList(toSort);
+        Arrays.asList(2, 43, 6, 45);
+
         //Searching
         //needs to be sorted
         System.out.println(Arrays.binarySearch(toSort, 43));
+        //negates the value of the position and substracts 1 it should be in if not found
         
         
     }

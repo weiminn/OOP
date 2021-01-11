@@ -21,6 +21,23 @@ public class ReferencesAndPrimitives {
     // long max = 3123456789; doesn't compile; out of range
     long max2 = 3123456789L; // tell Java it is long
 
+    //octal
+    int octNum = 017;
+    //hexa
+    int hexNum = 0xFF;
+    //binary
+    int binNum = 0b10;
+
+    //Can also be assigned to primitive types
+    //hexa
+    double _hexNum = 0xFF;
+    //binary
+    double _binNum = 0b10;
+
+    //underscore for easier read
+    //can be anywhere but start, end or beside decimal point
+    int million = 1_00_0;
+
     // find range
     { System.out.println(Integer.MAX_VALUE); }
 
@@ -29,8 +46,13 @@ public class ReferencesAndPrimitives {
     String greeting = "How are you";
     Date today = new Date();
 
-    // int value = null; doesn't compile; no null in int
+    // int value = null; doesn't compile; no null value in int
     String str = null; // address can be null
+
+    //DOES NOT COMPILE
+    //lossy conversion
+    // int j = 9.0;
+    // int k = 9L;
     
     
 }

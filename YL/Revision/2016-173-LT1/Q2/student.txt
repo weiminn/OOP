@@ -1,0 +1,6 @@
+Student,mary,F
+SISStudent,orange,M,Java,Python,C#,Go,Perl,C++
+SISStudent,apple,M,Java
+SISStudent,pear,M
+SISStudent,durian,F
+Student,ricky,M
